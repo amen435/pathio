@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathio — Your path. AI-powered.</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400&display=swap');
+
+        :root {
+            --bg: #000000;
+            --s1: #0A0A0A;
+            --s2: #141414;
+            --border: #222222;
+            --text: #F5F5F5;
+            --muted: #888888;
+            --dim: #444444;
+            --accent: #D8FF00;
+            --gold: #FFB800;
+            --blue: #00E5FF;
+            --danger: #FF3366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR CSS */
+        .navbar {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 2rem);
+            max-width: 1000px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 1rem 1.5rem;
+            background: rgba(10, 10, 10, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            z-index: 100;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        body { padding-top: 8rem; }
+        
+        .btn-register {
+            background: var(--text);
+            color: var(--bg);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            text-decoration: none;
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-register:hover {
+            opacity: 0.85;
+            background: var(--accent);
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .nav-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .nav-link:hover { color: var(--text); }
+        
+        .hero-toggler {
+            display: inline-flex;
+            align-items: center;
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+        .toggle-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            padding: 8px 20px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .toggle-item.active {
+            background: var(--border);
+            color: var(--text);
+        }
+        .toggle-divider {
+            width: 1px;
+            height: 12px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+        .navbar-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+        .navbar-logo span {
+            color: var(--accent);
+        }
+        .navbar-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            border: 1px solid rgba(216, 255, 0, 0.2);
+            padding: 5px 14px;
+            border-radius: 2px;
+        }
+
+        /* HERO CSS */
+        .hero {
+            max-width: 860px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5rem 2rem 3rem;
+        }
+        .hero-eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            letter-spacing: 0.12em;
+            margin-bottom: 2rem;
+        }
+        .hero-headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2.8rem, 7vw, 5.2rem);
+            line-height: 1.02;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+        }
+        .hero-headline .line1 { color: var(--text); display: block; }
+        .hero-headline .line2 { color: var(--muted); display: block; }
+        .hero-headline .line3 { color: var(--accent); display: block; }
+
+        .hero-subtext {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 1rem;
+            color: var(--muted);
+            max-width: 480px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .counter-pill {
+            display: inline-flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 8px 16px;
+            margin-bottom: 1.8rem;
+        }
+        .counter-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        .counter-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .form-container {
+            max-width: 440px;
+            margin: 0 auto 1rem;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: row;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            background: var(--s1);
+            transition: border-color 0.2s ease;
+        }
+        .form-row:focus-within {
+            border-color: var(--accent);
+        }
+        .form-row input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px 16px;
+            font-size: 14px;
+            color: var(--text);
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-row input::placeholder {
+            color: var(--muted);
+        }
+        .form-row button {
+            background: var(--accent);
+            color: #050A08;
+            border: none;
+            padding: 14px 22px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+        .form-row button:hover {
+            opacity: 0.85;
+        }
+
+        .success-msg {
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            border: 1px solid rgba(216, 255, 0, 0.2);
+            padding: 12px 20px;
+            border-radius: 2px;
+        }
+
+        .form-note {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+            margin-bottom: 3rem;
+        }
+
+        /* TICKER CSS */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 0;
+        }
+        .ticker {
+            display: flex;
+            width: max-content;
+            animation: tick 24s linear infinite;
+        }
+        @keyframes tick {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+        .ticker-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            padding: 0 2rem;
+            white-space: nowrap;
+        }
+        .ticker-item span {
+            color: var(--accent);
+            margin-right: 6px;
+        }
+
+        /* STATS CSS */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 720px;
+            margin: 3rem auto;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .stat-cell {
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+        .stat-cell:last-child {
+            border-right: none;
+        }
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 2.8rem;
+            color: var(--gold);
+            letter-spacing: -0.04em;
+            margin-bottom: 6px;
+        }
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            letter-spacing: 0.08em;
+            line-height: 1.5;
+        }
+
+        /* SECTION STYLES */
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            max-width: 860px;
+            margin: 0 auto 1rem;
+            padding: 0 2rem;
+        }
+        .section-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            max-width: 860px;
+            margin: 0 auto 1.5rem;
+            padding: 0 2rem;
+        }
+        .section-heading .muted {
+            color: var(--muted);
+        }
+
+        /* AGENTS SECTION CSS */
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 860px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .agent-card {
+            padding: 2rem 1.5rem;
+            border-right: 1px solid var(--border);
+        }
+        .agent-card:last-child {
+            border-right: none;
+        }
+        .agent-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.2rem;
+        }
+        .agent-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+        }
+        .agent-name.gold { color: var(--gold); }
+        .agent-name.blue { color: var(--blue); }
+        .agent-name.accent { color: var(--accent); }
+        .agent-desc {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.65;
+        }
+        .agent-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 1.2rem;
+        }
+        .agent-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.08em;
+            padding: 3px 8px;
+            border-radius: 2px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        /* MCP SECTION CSS */
+        .mcp-explanation {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 15px;
+            color: var(--muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            text-align: center;
+            line-height: 1.75;
+        }
+
+        .mcp-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1px;
+            max-width: 860px;
+            margin: 0 auto 2rem;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .mcp-card {
+            background: var(--s1);
+            padding: 1.75rem 1.5rem;
+        }
+        .mcp-card-top {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .mcp-icon {
+            width: 36px;
+            height: 36px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .mcp-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: var(--accent);
+            background: rgba(216, 255, 0, 0.08);
+            border: 1px solid rgba(216, 255, 0, 0.2);
+            padding: 3px 8px;
+            border-radius: 2px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .mcp-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 6px;
+            letter-spacing: 0.04em;
+        }
+        .mcp-purpose {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .mcp-callout {
+            background: rgba(216, 255, 0, 0.05);
+            border: 1px solid rgba(216, 255, 0, 0.2);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 2px 2px 0;
+            padding: 1.5rem 2rem;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .mcp-callout-text {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* HOW IT WORKS CSS */
+        .flow-wrap {
+            max-width: 860px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .flow-row {
+            display: flex;
+            align-items: stretch;
+            border-bottom: 1px solid var(--border);
+        }
+        .flow-row:last-child {
+            border-bottom: none;
+        }
+        .flow-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            padding: 1.5rem 1.25rem;
+            border-right: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 52px;
+        }
+        .flow-content {
+            flex: 1;
+            padding: 1.5rem;
+        }
+        .flow-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
+            color: var(--text);
+        }
+        .flow-desc {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .flow-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--accent);
+            padding: 1.5rem 1.25rem;
+            border-left: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        /* BOTTOM CTA CSS */
+        .cta-section {
+            background: var(--s1);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 5rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        .cta-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+        .cta-subtext {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        /* FOOTER CSS */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 1.4rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .footer-left {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.06em;
+        }
+        .footer-right {
+            display: flex;
+            flex-direction: row;
+            gap: 1.5rem;
+        }
+        .footer-right a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .footer-right a:hover {
+            color: var(--accent);
+        }
+
+        /* RESPONSIVE CSS */
+        @media (max-width: 600px) {
+            .agents-grid { grid-template-columns: 1fr; }
+            .agent-card { border-right: none; border-bottom: 1px solid var(--border); }
+            .agent-card:last-child { border-bottom: none; }
+            
+            .stats-row { grid-template-columns: 1fr; }
+            .stat-cell { border-right: none; border-bottom: 1px solid var(--border); }
+            .stat-cell:last-child { border-bottom: none; }
+            
+            .mcp-grid { grid-template-columns: 1fr; }
+            
+            .hero { padding: 3rem 1.25rem 2rem; }
+            
+            .section-heading, .hero-headline, .cta-heading { font-size: 2rem; }
+            
+            .form-row { flex-direction: column; }
+            .form-row button { width: 100%; }
+            
+            .flow-time { display: none; }
+            .hide-mobile { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-logo">PATHI<span>O</span></div>
+        <div class="nav-links">
+            <a href="login.html" class="nav-link hide-mobile">Login</a>
+            <a href="register.html" class="btn-register">Register</a>
+        </div>
+    </nav>
+
+    <main class="hero">
+        <div class="hero-toggler">
+            <div class="toggle-item active" onclick="document.querySelectorAll('.toggle-item').forEach(e=>e.classList.remove('active')); this.classList.add('active');">For Job Seekers</div>
+            <div class="toggle-divider"></div>
+            <div class="toggle-item" onclick="document.querySelectorAll('.toggle-item').forEach(e=>e.classList.remove('active')); this.classList.add('active');">For Founders</div>
+        </div>
+        <div class="hero-eyebrow">AI CAREER AGENT · LEARN · EARN · BUILD</div>
+        <h1 class="hero-headline">
+            <span class="line1">Stop figuring</span>
+            <span class="line2">it out</span>
+            <span class="line3">alone.</span>
+        </h1>
+        <p class="hero-subtext">Stop going it alone. Pathio builds your roadmap, hunts jobs, auto-applies, and grows with you — from first skill to first business.</p>
+        
+        <div class="counter-pill">
+            <div class="counter-dot"></div>
+            <span class="counter-text" id="ctr-n">312 people on the waitlist</span>
+        </div>
+        
+        <div class="form-container">
+            <div class="form-row" id="frow1">
+                <input type="email" id="em1" placeholder="Enter your email address...">
+                <button type="button" onclick="join1()">Join Waitlist →</button>
+            </div>
+            <div class="success-msg" id="ok1">✓ You're in. We'll reach out before launch.</div>
+        </div>
+        
+        <div class="form-note">No spam · No credit card · Early access only</div>
+    </main>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <!-- First Set -->
+            <div class="ticker-item"><span>▸</span>Learn anything</div>
+            <div class="ticker-item"><span>▸</span>Earn autonomously</div>
+            <div class="ticker-item"><span>▸</span>Build boldly</div>
+            <div class="ticker-item"><span>▸</span>AI remembers you</div>
+            <div class="ticker-item"><span>▸</span>Auto-apply to jobs</div>
+            <div class="ticker-item"><span>▸</span>Weekly check-ins</div>
+            <div class="ticker-item"><span>▸</span>You approve · Agent executes</div>
+            <div class="ticker-item"><span>▸</span>Global · Free to start</div>
+            <!-- Second Set for loop -->
+            <div class="ticker-item"><span>▸</span>Learn anything</div>
+            <div class="ticker-item"><span>▸</span>Earn autonomously</div>
+            <div class="ticker-item"><span>▸</span>Build boldly</div>
+            <div class="ticker-item"><span>▸</span>AI remembers you</div>
+            <div class="ticker-item"><span>▸</span>Auto-apply to jobs</div>
+            <div class="ticker-item"><span>▸</span>Weekly check-ins</div>
+            <div class="ticker-item"><span>▸</span>You approve · Agent executes</div>
+            <div class="ticker-item"><span>▸</span>Global · Free to start</div>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-cell">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Autonomous<br>AI agents</div>
+        </div>
+        <div class="stat-cell">
+            <div class="stat-number">&lt;8s</div>
+            <div class="stat-label">Avg approval<br>time</div>
+        </div>
+        <div class="stat-cell">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Agent<br>uptime</div>
+        </div>
+    </div>
+
+    <section class="agents-section" style="margin-bottom: 5rem;">
+        <div class="section-tag">// AGENTS</div>
+        <h2 class="section-heading">Three agents.<br><span class="muted">One mission.</span></h2>
+        
+        <div class="agents-grid">
+            <div class="agent-card">
+                <div class="agent-id">AGENT_01 / LEARN</div>
+                <div class="agent-name gold">Learn</div>
+                <div class="agent-desc">Tell us your goal. The Learn Agent builds a personal week-by-week roadmap, finds the best free and paid resources, and checks in every Sunday to keep you moving.</div>
+                <div class="agent-pills">
+                    <span class="agent-pill">Roadmap</span>
+                    <span class="agent-pill">Resources</span>
+                    <span class="agent-pill">Check-ins</span>
+                    <span class="agent-pill">Weekly AI</span>
+                </div>
+            </div>
+            
+            <div class="agent-card">
+                <div class="agent-id">AGENT_02 / EARN</div>
+                <div class="agent-name blue">Earn</div>
+                <div class="agent-desc">Scans job boards and freelance platforms daily. Writes tailored proposals. Auto-applies using browser automation. Follows up on every application. You approve. It executes.</div>
+                <div class="agent-pills">
+                    <span class="agent-pill">Job hunt</span>
+                    <span class="agent-pill">Proposals</span>
+                    <span class="agent-pill">Auto-apply</span>
+                    <span class="agent-pill">Follow-up</span>
+                </div>
+            </div>
+            
+            <div class="agent-card">
+                <div class="agent-id">AGENT_03 / BUILD</div>
+                <div class="agent-name accent">Build</div>
+                <div class="agent-desc">Validates your business idea with real market research. Writes your business plan. Finds your first customers. Acts as your AI co-founder — available 24/7.</div>
+                <div class="agent-pills">
+                    <span class="agent-pill">Validation</span>
+                    <span class="agent-pill">Business plan</span>
+                    <span class="agent-pill">Customers</span>
+                    <span class="agent-pill">Co-founder</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mcp-section" style="margin-bottom: 5rem;">
+        <div class="section-tag">// POWERED BY MCP</div>
+        <h2 class="section-heading" style="text-align: center;">What is MCP?<br><span style="color: var(--accent);">The nervous system.</span></h2>
+        
+        <p class="mcp-explanation">MCP (Model Context Protocol) is an open standard that lets AI agents connect to real tools and services — like browsers, email, databases, and apps — so they can take real actions in the world, not just generate text. Think of MCP as the bridge between Pathio's AI brain and everything it needs to act on your behalf.</p>
+        
+        <div class="mcp-grid">
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">⚡</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">Playwright MCP</div>
+                <div class="mcp-purpose">Auto-fills and submits job applications on any website. Pathio applies while you sleep.</div>
+            </div>
+
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">🔍</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">Brave Search MCP</div>
+                <div class="mcp-purpose">Scans the web for job postings, courses, and market data — refreshed every day.</div>
+            </div>
+
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">◆</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">GitHub MCP</div>
+                <div class="mcp-purpose">Reads your repositories to understand your real skills and build your portfolio story.</div>
+            </div>
+
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">✉</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">Gmail MCP</div>
+                <div class="mcp-purpose">Sends proposals, follow-up emails, and weekly check-ins on your behalf.</div>
+            </div>
+
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">▣</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">Notion MCP</div>
+                <div class="mcp-purpose">Tracks every application, milestone, and learning goal in your personal workspace.</div>
+            </div>
+
+            <div class="mcp-card">
+                <div class="mcp-card-top">
+                    <div class="mcp-icon">🗄</div>
+                    <div class="mcp-badge">CONNECTED</div>
+                </div>
+                <div class="mcp-name">PostgreSQL MCP</div>
+                <div class="mcp-purpose">Stores your full journey — every lesson, application, and win — so Pathio grows with you.</div>
+            </div>
+        </div>
+
+        <div class="mcp-callout">
+            <div class="mcp-callout-text">MCP is what separates Pathio from a chatbot. While other tools just answer questions, Pathio uses MCP to take real actions — applying to jobs, sending emails, tracking your progress — autonomously and on your behalf.</div>
+        </div>
+    </section>
+
+    <section class="how-it-works-section" style="margin-bottom: 5rem;">
+        <div class="section-tag">// HOW IT WORKS</div>
+        <h2 class="section-heading">You set the goal.<br><span class="muted">Pathio does the rest.</span></h2>
+
+        <div class="flow-wrap">
+            <div class="flow-row">
+                <div class="flow-num">01</div>
+                <div class="flow-content">
+                    <div class="flow-title">Tell Pathio your goal</div>
+                    <div class="flow-desc">A 5-minute onboarding interview. The agent learns who you are, where you are, and where you want to go.</div>
+                </div>
+                <div class="flow-time">5 min</div>
+            </div>
+            <div class="flow-row">
+                <div class="flow-num">02</div>
+                <div class="flow-content">
+                    <div class="flow-title">Agent builds your roadmap</div>
+                    <div class="flow-desc">Personalized learning path and week-by-week plan — generated and ready within minutes.</div>
+                </div>
+                <div class="flow-time">Instant</div>
+            </div>
+            <div class="flow-row">
+                <div class="flow-num">03</div>
+                <div class="flow-content">
+                    <div class="flow-title">Earn Agent starts hunting</div>
+                    <div class="flow-desc">Scans global job boards, writes tailored proposals, queues them for your approval.</div>
+                </div>
+                <div class="flow-time">Daily</div>
+            </div>
+            <div class="flow-row">
+                <div class="flow-num">04</div>
+                <div class="flow-content">
+                    <div class="flow-title">You approve. Agent applies.</div>
+                    <div class="flow-desc">One tap to approve. Browser automation submits. Gmail sends follow-ups automatically.</div>
+                </div>
+                <div class="flow-time">&lt;8s</div>
+            </div>
+            <div class="flow-row">
+                <div class="flow-num">05</div>
+                <div class="flow-content">
+                    <div class="flow-title">Pathio remembers everything</div>
+                    <div class="flow-desc">Every lesson, rejection, and win stored. The agent gets smarter with you over time.</div>
+                </div>
+                <div class="flow-time">Always</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2 class="cta-heading">Your path starts<br><span style="color: var(--accent);">tonight.</span></h2>
+        <p class="cta-subtext">Join the waitlist. Be first when we launch.</p>
+        
+        <div class="form-container">
+            <div class="form-row" id="frow2">
+                <input type="email" id="em2" placeholder="Enter your email address...">
+                <button type="button" onclick="join2()">Join Waitlist →</button>
+            </div>
+            <div class="success-msg" id="ok2">✓ You're in. We'll reach out before launch.</div>
+            <div class="form-note" style="margin-top: 1rem; margin-bottom: 0;">Free to start · No credit card · Early access</div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="footer-left">© 2026 PATHIO — Built for the ambitious.</div>
+        <div class="footer-right">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </footer>
+    <!-- Make sure backend is running on http://localhost:5000 -->
+    <!-- In production replace API constant with your deployed backend URL -->
+    <!-- Example: const API = 'https://api.pathio.ai' -->
+    <script>
+        const API = 'http://localhost:5000/api';
+
+        let count = 312;
+        const em1 = document.getElementById('em1');
+        const frow1 = document.getElementById('frow1');
+        const ok1 = document.getElementById('ok1');
+        const ctrN = document.getElementById('ctr-n');
+
+        async function join1() {
+            const val = em1.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(val)) {
+                em1.style.outline = '1px solid var(--danger)';
+                setTimeout(() => { em1.style.outline = 'none'; }, 1000);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/auth/waitlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: val }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    count = data.data.count || count + 1;
+                    ctrN.textContent = count + ' people on the waitlist';
+                    frow1.style.display = 'none';
+                    ok1.style.display = 'block';
+                } else if (res.status === 409) {
+                    ok1.textContent = "✓ You're already on the waitlist!";
+                    frow1.style.display = 'none';
+                    ok1.style.display = 'block';
+                } else {
+                    ok1.textContent = "Something went wrong. Try again.";
+                    ok1.style.color = 'var(--danger)';
+                    ok1.style.display = 'block';
+                }
+            } catch (err) {
+                ok1.textContent = "Connection error. Try again.";
+                ok1.style.color = 'var(--danger)';
+                ok1.style.display = 'block';
+            }
+        }
+
+        em1.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); join1(); }
+        });
+
+        const em2 = document.getElementById('em2');
+        const frow2 = document.getElementById('frow2');
+        const ok2 = document.getElementById('ok2');
+
+        async function join2() {
+            const val = em2.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!emailRegex.test(val)) {
+                em2.style.outline = '1px solid var(--danger)';
+                setTimeout(() => { em2.style.outline = 'none'; }, 1000);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API}/auth/waitlist`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: val }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    count = data.data.count || count + 1;
+                    ctrN.textContent = count + ' people on the waitlist';
+                    frow2.style.display = 'none';
+                    ok2.style.display = 'block';
+                } else if (res.status === 409) {
+                    ok2.textContent = "✓ You're already on the waitlist!";
+                    frow2.style.display = 'none';
+                    ok2.style.display = 'block';
+                } else {
+                    ok2.textContent = "Something went wrong. Try again.";
+                    ok2.style.color = 'var(--danger)';
+                    ok2.style.display = 'block';
+                }
+            } catch (err) {
+                ok2.textContent = "Connection error. Try again.";
+                ok2.style.color = 'var(--danger)';
+                ok2.style.display = 'block';
+            }
+        }
+
+        if (em2) {
+            em2.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') { e.preventDefault(); join2(); }
+            });
+        }
+    </script>
+</body>
+</html>

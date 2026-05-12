@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pathio - Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400&display=swap');
+
+        :root {
+            --bg: #000000;
+            --s1: #0A0A0A;
+            --s2: #141414;
+            --border: #222222;
+            --text: #F5F5F5;
+            --muted: #888888;
+            --accent: #D8FF00;
+            --gold: #FFB800;
+            --blue: #00E5FF;
+            --danger: #FF3366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at center, rgba(216,255,0,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .navbar {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.4rem 2rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 10;
+        }
+        .navbar-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.06em;
+            transition: color 0.2s;
+        }
+        .navbar-link:hover {
+            color: var(--accent);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 380px;
+            background: var(--s1);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 2.5rem;
+        }
+
+        .card-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: -0.04em;
+            margin-bottom: 2rem;
+        }
+        .card-logo span {
+            color: var(--accent);
+        }
+
+        .card-heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-subtext {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            padding: 12px 14px;
+            font-size: 14px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .input-field:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(216,255,0,0.06);
+        }
+
+        .forgot-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .forgot-link:hover {
+            color: var(--text);
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 0.5rem;
+            background: var(--accent);
+            color: #000000;
+            border: none;
+            border-radius: 2px;
+            padding: 13px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-submit:hover {
+            opacity: 0.85;
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #log-error {
+            display: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--danger);
+            margin-top: 0.75rem;
+            text-align: center;
+        }
+
+        .card-footer {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        .card-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-texture"></div>
+    
+    <div style="display: flex; flex-direction: column; min-height: 100vh;">
+        <nav class="navbar">
+            <a href="index.html" class="navbar-link">← PATHIO</a>
+            <div></div>
+        </nav>
+        
+        <main class="main-content">
+            <div class="card">
+                <div class="card-logo">PATHI<span>O</span></div>
+                <h1 class="card-heading">Welcome back.</h1>
+                <p class="card-subtext">Use your Pathio email to continue.</p>
+                
+                <div class="input-group">
+                    <label class="input-label" for="log-email">Email</label>
+                    <input type="email" class="input-field" id="log-email" placeholder="you@email.com">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label" for="log-pass">Password</label>
+                    <input type="password" class="input-field" id="log-pass" placeholder="Your password">
+                    <div style="text-align: right; margin-top: 6px;">
+                        <a href="#" class="forgot-link">Forgot?</a>
+                    </div>
+                </div>
+                
+                <button type="button" id="btn-login" class="btn-submit" onclick="handleLogin()">Sign in →</button>
+                <div id="log-error"></div>
+                
+                <div class="card-footer">
+                    No account yet?<a href="register.html">Create account</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Make sure backend is running on http://localhost:5000 -->
+    <!-- In production replace API constant with your deployed backend URL -->
+    <!-- Example: const API = 'https://api.pathio.ai' -->
+    <script>
+        const API = 'http://localhost:5000/api';
+
+        async function handleLogin() {
+            const email = document.getElementById('log-email').value.trim();
+            const pass = document.getElementById('log-pass').value;
+            const errorDiv = document.getElementById('log-error');
+            const btn = document.getElementById('btn-login');
+
+            // reset error
+            errorDiv.style.display = 'none';
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (!email || !pass || !emailRegex.test(email)) {
+                errorDiv.textContent = "Check your email and password.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Loading state
+            btn.textContent = "Signing in...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password: pass }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    // Store auth data
+                    localStorage.setItem('pathio_token', data.data.token);
+                    localStorage.setItem('pathio_user', JSON.stringify(data.data.user));
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 400);
+                } else {
+                    errorDiv.textContent = data.message || "Login failed.";
+                    errorDiv.style.display = 'block';
+                    btn.textContent = "Sign in →";
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                errorDiv.textContent = "Connection error. Try again.";
+                errorDiv.style.display = 'block';
+                btn.textContent = "Sign in →";
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
