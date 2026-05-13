@@ -439,7 +439,9 @@
     <!-- In production replace API constant with your deployed backend URL -->
     <!-- Example: const API = 'https://api.pathio.ai' -->
     <script>
-        const API = 'http://localhost:5000/api';
+        const API = window.location.hostname === "localhost"
+            ? "http://localhost:5000/api"
+            : "https://pathio-t9hp.onrender.com";
 
         async function handleRegister() {
             const name = document.getElementById('reg-name').value.trim();
