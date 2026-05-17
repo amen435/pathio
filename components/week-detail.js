@@ -58,9 +58,9 @@ export async function openWeekDetail(weekId) {
             difficulty: "easy",
             status: "ACTIVE",
             mobileFillBlanks: {
-                template: "<__>function</__> greet(name) {\\n  return <__>'Hello, '</__> + name;\\n}",
-                blanks: ["function", "'Hello, '"],
-                explanation: "Fill in the missing keywords to complete the function."
+                template: "function greet(name) {\\n  return _B1_ + name\\n}",
+                blanks: ['"Hello, "'],
+                explanation: "The return value combines a greeting string with the name parameter."
             }
         };
         renderPanel(mockData);

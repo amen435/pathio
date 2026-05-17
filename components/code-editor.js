@@ -2,6 +2,12 @@ import { EditorView, basicSetup } from 'codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 import { html } from '@codemirror/lang-html';
 import { python } from '@codemirror/lang-python';
+import {
+  renderFillBlanks,
+  getFillBlanksCode,
+  destroyFillBlanks,
+  testFillBlanks,
+} from './fill-blanks.js';
 
 const MOBILE_BREAKPOINT = 768;
 
@@ -80,39 +86,54 @@ function getCodeFromEditor() {
   return fallback ? fallback.value : '';
 }
 
-function getFillBlanksCode() {
-  const panel = document.getElementById('fill-blanks-panel');
-  if (!panel) return '';
-
-  const template = panel.dataset.template || '';
-  const inputs = panel.querySelectorAll('.blank-input');
-  let blankIndex = 0;
-
-  return template.replace(/<__>|<\/__>/g, (match) => {
-    if (match === '<__>') {
-      const value = inputs[blankIndex]?.value || '';
-      blankIndex += 1;
-      return value;
-    }
-    return '';
-  });
-}
-
 export function destroyCodeEditor() {
   if (editor) {
     editor.destroy();
     editor = null;
   }
+  destroyFillBlanks();
   mobileTextarea = null;
   fillBlanksActive = false;
   mobileFillBlanksData = null;
 }
 
+function showMobileFillBlanks() {
+  const container = document.getElementById('code-editor-container');
+  const mobileEl = document.getElementById('code-editor-mobile');
+  const fillPanel = document.getElementById('fill-blanks-panel');
+
+  if (!fillPanel || !mobileFillBlanksData) return false;
+
+  fillBlanksActive = true;
+  container?.classList.add('hidden');
+  mobileEl?.classList.add('hidden');
+
+  renderFillBlanks(mobileFillBlanksData, currentLanguage, fillPanel, {
+    onBack: () => {
+      fillBlanksActive = false;
+      destroyFillBlanks();
+      if (isMobileViewport()) {
+        mobileEl?.classList.remove('hidden');
+        mobileTextarea = mobileEl;
+      } else {
+        container?.classList.remove('hidden');
+      }
+    },
+  });
+
+  return true;
+}
+
 export function initCodeEditor(language, starterCode = '', options = {}) {
-  destroyCodeEditor();
+  if (editor) {
+    editor.destroy();
+    editor = null;
+  }
+  destroyFillBlanks();
 
   currentLanguage = normalizeLanguage(language);
   mobileFillBlanksData = options.mobileFillBlanks || null;
+  fillBlanksActive = false;
 
   const container = document.getElementById('code-editor-container');
   const mobileEl = document.getElementById('code-editor-mobile');
@@ -127,11 +148,17 @@ export function initCodeEditor(language, starterCode = '', options = {}) {
   if (mobileEl) {
     mobileEl.value = code;
     mobileEl.classList.add('hidden');
+    mobileTextarea = null;
   }
 
   if (fillPanel) {
     fillPanel.classList.add('hidden');
     fillPanel.innerHTML = '';
+  }
+
+  if (isMobileViewport() && mobileFillBlanksData) {
+    showMobileFillBlanks();
+    return;
   }
 
   if (isMobileViewport()) {
@@ -143,11 +170,7 @@ export function initCodeEditor(language, starterCode = '', options = {}) {
     return;
   }
 
-  const extensions = [
-    basicSetup,
-    pathioTheme,
-    EditorView.lineWrapping,
-  ];
+  const extensions = [basicSetup, pathioTheme, EditorView.lineWrapping];
 
   if (langMap[currentLanguage]) {
     extensions.push(langMap[currentLanguage]);
@@ -166,56 +189,19 @@ export function switchToFillBlanks() {
     return;
   }
 
-  const container = document.getElementById('code-editor-container');
-  const mobileEl = document.getElementById('code-editor-mobile');
-  const fillPanel = document.getElementById('fill-blanks-panel');
-
-  if (!fillPanel) return;
-
-  fillBlanksActive = true;
-  container?.classList.add('hidden');
-  mobileEl?.classList.add('hidden');
-
-  const template = String(mobileFillBlanksData.template || '');
-  const blanks = Array.isArray(mobileFillBlanksData.blanks) ? mobileFillBlanksData.blanks : [];
-
-  let blankIndex = 0;
-  const rendered = template.replace(/<\/?__>/g, (match) => {
-    if (match === '<__>') {
-      const placeholder = blanks[blankIndex] ? `e.g. ${blanks[blankIndex]}` : 'type here';
-      const input = `<input type="text" class="blank-input" data-blank-index="${blankIndex}" placeholder="${escapeHtml(placeholder)}" />`;
-      blankIndex += 1;
-      return input;
-    }
-    return '';
-  });
-
-  fillPanel.dataset.template = template;
-  fillPanel.innerHTML = `
-    <p class="fill-blanks-hint">${escapeHtml(mobileFillBlanksData.explanation || 'Fill in the blanks to complete the code.')}</p>
-    <div class="fill-blanks-code">${rendered}</div>
-    <button type="button" class="fill-back-btn" id="fill-back-btn">← Back to editor</button>
-  `;
-
-  fillPanel.classList.remove('hidden');
-
-  document.getElementById('fill-back-btn')?.addEventListener('click', () => {
-    fillBlanksActive = false;
-    fillPanel.classList.add('hidden');
-    if (isMobileViewport()) {
-      mobileEl?.classList.remove('hidden');
-    } else {
-      container?.classList.remove('hidden');
-    }
-  });
+  showMobileFillBlanks();
 }
+
+export { testFillBlanks };
 
 export function showOutput(text, type = 'success') {
   const outputEl = document.getElementById('code-output');
   if (!outputEl) return;
 
   outputEl.classList.remove('output-success', 'output-error', 'output-neutral');
-  outputEl.classList.add(type === 'error' ? 'output-error' : type === 'success' ? 'output-success' : 'output-neutral');
+  outputEl.classList.add(
+    type === 'error' ? 'output-error' : type === 'success' ? 'output-success' : 'output-neutral'
+  );
 
   if (type === 'html-preview') {
     outputEl.innerHTML = '';
@@ -277,32 +263,35 @@ export function runCode(language) {
   showOutput(`Running ${lang} is not supported in the live preview.`, 'error');
 }
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
 window.addEventListener('resize', () => {
   const container = document.getElementById('code-editor-container');
-  if (!container || fillBlanksActive) return;
+  if (!container) return;
 
-  const hasDesktopEditor = Boolean(editor);
   const onMobile = isMobileViewport();
 
-  if (onMobile && hasDesktopEditor) {
+  if (onMobile && editor) {
     const code = editor.state.doc.toString();
-    destroyCodeEditor();
-    const mobileEl = document.getElementById('code-editor-mobile');
-    if (mobileEl) {
-      mobileEl.value = code;
-      mobileEl.classList.remove('hidden');
-      mobileTextarea = mobileEl;
-    }
+    editor.destroy();
+    editor = null;
     container.classList.add('hidden');
-  } else if (!onMobile && !hasDesktopEditor && mobileTextarea) {
+    if (mobileFillBlanksData) {
+      showMobileFillBlanks();
+    } else {
+      const mobileEl = document.getElementById('code-editor-mobile');
+      if (mobileEl) {
+        mobileEl.value = code;
+        mobileEl.classList.remove('hidden');
+        mobileTextarea = mobileEl;
+        fillBlanksActive = false;
+      }
+    }
+  } else if (!onMobile && fillBlanksActive && mobileFillBlanksData) {
+    destroyFillBlanks();
+    fillBlanksActive = false;
+    document.getElementById('code-editor-mobile')?.classList.add('hidden');
+    const code = getFillBlanksCode() || '';
+    initCodeEditor(currentLanguage, code, { mobileFillBlanks: mobileFillBlanksData });
+  } else if (!onMobile && !editor && mobileTextarea) {
     const code = mobileTextarea.value;
     mobileTextarea.classList.add('hidden');
     initCodeEditor(currentLanguage, code, { mobileFillBlanks: mobileFillBlanksData });

@@ -1,0 +1,175 @@
+.fill-blanks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fill-blanks-code {
+  font-family: 'Geist Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #8FDFBA;
+  background: #050A08;
+  border: 1px solid #1A2E22;
+  border-radius: 8px;
+  padding: 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.fill-code-text {
+  white-space: pre-wrap;
+}
+
+.fill-blanks-code .blank {
+  display: inline-block;
+  min-width: 72px;
+  min-height: 44px;
+  margin: 2px 4px;
+  padding: 8px 10px;
+  vertical-align: middle;
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  color: #E8F0EB;
+  background: #0C1410;
+  border: 2px solid #1A2E22;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  caret-color: transparent;
+}
+
+.fill-blanks-code .blank.blank-focused {
+  border-color: #3DFF8F;
+  box-shadow: 0 0 0 2px rgba(61, 255, 143, 0.2);
+}
+
+.fill-blanks-code .blank.blank-correct {
+  background: #1A4A2E;
+  border-color: #3DFF8F;
+  color: #3DFF8F;
+}
+
+.fill-blanks-code .blank.blank-wrong {
+  background: #2A1A1A;
+  border-color: #F87171;
+  color: #F87171;
+}
+
+.fill-blanks-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fill-options-label {
+  font-family: 'Hind', sans-serif;
+  font-size: 12px;
+  color: #8DA197;
+  margin: 0;
+}
+
+.fill-options-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fill-option {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #1A2E22;
+  border-radius: 999px;
+  background: #111D17;
+  color: #E8F0EB;
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  touch-action: manipulation;
+}
+
+.fill-option:hover,
+.fill-option:active {
+  border-color: #3DFF8F;
+  background: rgba(61, 255, 143, 0.1);
+}
+
+.fill-option:active {
+  transform: scale(0.97);
+}
+
+.fill-hint-text {
+  font-family: 'Hind', sans-serif;
+  font-size: 12px;
+  color: #FFB800;
+  line-height: 1.5;
+  margin: 0;
+  padding: 10px 12px;
+  background: rgba(255, 184, 0, 0.08);
+  border: 1px dashed rgba(255, 184, 0, 0.35);
+  border-radius: 6px;
+}
+
+.fill-hint-text.hidden {
+  display: none;
+}
+
+.fill-blanks-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.fill-blanks-actions .test-btn {
+  flex: 1;
+  min-height: 44px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #3DFF8F;
+  color: #041008;
+  font-family: 'Geist Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.fill-blanks-actions .fill-back-btn {
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #1A2E22;
+  border-radius: 8px;
+  background: transparent;
+  color: #8DA197;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.fill-blanks-actions .fill-back-btn:hover {
+  border-color: #3DFF8F;
+  color: #3DFF8F;
+}
+
+.fill-result {
+  min-height: 24px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fill-result-success {
+  color: #3DFF8F;
+}
+
+.fill-result-error {
+  color: #F87171;
+}
+
+.fill-result-hint {
+  color: #FFB800;
+}
