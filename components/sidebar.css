@@ -1,0 +1,365 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Geist+Mono:wght@400;600&family=Hind:wght@400;500;600&display=swap');
+
+.pathio-sidebar {
+    width: 260px;
+    height: 100vh;
+    background: #0C1410;
+    border-right: 1px solid #1A2E22;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.pathio-sidebar * {
+    box-sizing: border-box;
+}
+
+.sidebar-logo {
+    padding: 0 24px;
+    margin-bottom: 24px;
+}
+
+.logo-text {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 18px;
+    color: #E8F0EB;
+    letter-spacing: 1px;
+}
+
+.logo-accent {
+    color: #3DFF8F;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: #1A2E22;
+    margin: 0 0 24px 0;
+    width: 100%;
+}
+
+.sidebar-section {
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 24px;
+}
+
+.section-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #E8F0EB;
+    font-family: 'Hind', sans-serif;
+    font-size: 13px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
+}
+
+.nav-item:hover {
+    background: #0F1A12;
+    color: #8FB89A;
+}
+
+.nav-item.active {
+    background: #111D17;
+    border-left: 2px solid #3DFF8F;
+    color: #E8F0EB;
+}
+
+.nav-icon {
+    font-size: 16px;
+    width: 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lock-icon {
+    margin-left: auto;
+    color: #4A6355;
+    display: flex;
+    align-items: center;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.stat-card {
+    background: #111D17;
+    border: 1px solid #1A2E22;
+    padding: 10px 12px;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.stat-value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: #3DFF8F;
+    line-height: 1;
+}
+
+.stat-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 8px;
+    color: #4A6355;
+    text-transform: uppercase;
+}
+
+.streak-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 20px);
+    gap: 6px;
+}
+
+.streak-square {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 7px;
+    border-radius: 2px;
+}
+
+.streak-square.completed {
+    background: #1A4A2E;
+    color: #4ADE80;
+}
+
+.streak-square.active {
+    background: #3DFF8F;
+    color: #0C1410;
+}
+
+.streak-square.locked {
+    background: #111D17;
+    color: #2A4A3A;
+}
+
+.user-card-wrapper {
+    margin-top: auto;
+    padding: 0 20px;
+}
+
+.user-card {
+    background: #111D17;
+    border: 1px solid #1A2E22;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1A4A2E;
+    color: #3DFF8F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow: hidden;
+}
+
+.user-name {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 12px;
+    color: #E8F0EB;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-id {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+}
+
+.user-actions {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.15s ease;
+    background: #111D17;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.user-card:hover .user-actions {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sign-out-btn {
+    background: none;
+    border: none;
+    color: #F87171;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s ease;
+}
+
+.sign-out-btn:hover {
+    color: #ff8e8e;
+}
+
+/* Mobile Responsive */
+@media (max-width: 767px) {
+    .pathio-sidebar {
+        width: 100%;
+        height: 60px;
+        top: auto;
+        bottom: 0;
+        border-right: none;
+        border-top: 1px solid #1A2E22;
+        flex-direction: row;
+        padding: 0;
+        align-items: center;
+    }
+
+    .sidebar-logo, 
+    .desktop-only, 
+    .section-label {
+        display: none !important;
+    }
+
+    .sidebar-divider {
+        display: none;
+    }
+
+    .sidebar-section {
+        margin: 0;
+        padding: 0;
+        flex: 1;
+        display: flex;
+        align-items: center;
+    }
+
+    .sidebar-nav {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        gap: 0;
+    }
+
+    .nav-item {
+        flex-direction: column;
+        padding: 10px;
+        border-left: none !important;
+        border-bottom: 2px solid transparent;
+        justify-content: center;
+        border-radius: 0;
+        flex: 1;
+    }
+
+    .nav-item.active {
+        border-bottom: 2px solid #3DFF8F;
+        background: transparent;
+    }
+
+    .nav-item:hover {
+        background: transparent;
+        color: #3DFF8F;
+    }
+
+    .nav-label, .lock-icon {
+        display: none !important;
+    }
+
+    .nav-icon {
+        font-size: 20px;
+    }
+
+    .user-card-wrapper {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        padding: 0;
+        margin: 0;
+        z-index: 1001;
+    }
+
+    .user-card {
+        padding: 0;
+        background: transparent;
+        border: none;
+    }
+
+    .user-card .user-avatar {
+        width: 36px;
+        height: 36px;
+        box-shadow: 0 0 0 2px #0C1410, 0 0 0 3px #1A2E22;
+    }
+
+    .user-card .user-info {
+        display: none;
+    }
+
+    .user-card .user-actions {
+        top: calc(100% + 8px);
+        right: 0;
+        transform: none;
+        border: 1px solid #1A2E22;
+        padding: 10px 16px;
+    }
+}

@@ -1,0 +1,150 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #080F0A;
+  color: #E8F0EB;
+  font-family: 'Hind', sans-serif;
+  overflow: hidden; /* App shell handles grid overflow */
+}
+
+/* Grid layout */
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr 320px;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.sidebar {
+  background: #0C1410;
+  border-right: 1px solid #1A2E22;
+  height: 100vh;
+  position: relative;
+}
+
+/* Overriding fixed position from sidebar component to fit within grid */
+.sidebar .pathio-sidebar {
+  position: static !important;
+  width: 100% !important;
+}
+
+.roadmap-main {
+  background: #080F0A;
+  overflow-y: auto;
+  padding: 32px 24px;
+}
+
+.week-detail {
+  background: #0C1410;
+  border-left: 1px solid #1A2E22;
+  overflow-y: auto;
+  padding: 24px 20px;
+  height: 100vh;
+}
+
+.empty-detail-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #4A6355;
+  font-family: 'Hind', sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Header */
+.roadmap-header {
+  max-width: 440px;
+  margin: 0 auto 40px auto;
+}
+
+.roadmap-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #E8F0EB;
+  margin-bottom: 8px;
+}
+
+.roadmap-meta {
+  display: flex;
+  gap: 16px;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: #4A6355;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+/* Progress bar */
+.progress-bar-wrap {
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Geist Mono', monospace;
+  font-size: 10px;
+  color: #8FB89A;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 3px;
+  background: #1A2E22;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #3DFF8F;
+  width: 0%;
+  transition: width 0.4s ease-out;
+  border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .app-shell {
+    grid-template-columns: 260px 1fr;
+  }
+  .week-detail {
+    display: none; /* Opens as modal later */
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 1000;
+    border-right: none;
+    border-top: 1px solid #1A2E22;
+  }
+
+  .sidebar .pathio-sidebar {
+    height: 60px !important;
+  }
+  
+  .roadmap-main {
+    padding: 24px 16px;
+    padding-bottom: 80px; /* Space for bottom nav */
+  }
+}

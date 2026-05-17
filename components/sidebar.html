@@ -1,0 +1,92 @@
+<link rel="stylesheet" href="components/sidebar.css">
+
+<aside class="pathio-sidebar" id="pathio-sidebar">
+    <!-- LOGO -->
+    <div class="sidebar-logo">
+        <span class="logo-text">PATH<span class="logo-accent">IO</span></span>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- NAV SECTION -->
+    <div class="sidebar-section">
+        <span class="section-label">MENU</span>
+        <nav class="sidebar-nav">
+            <a href="/roadmap" class="nav-item active" data-page="roadmap">
+                <span class="nav-icon">◎</span>
+                <span class="nav-label">Roadmap</span>
+            </a>
+            <a href="/projects" class="nav-item" data-page="projects">
+                <span class="nav-icon">▦</span>
+                <span class="nav-label">Projects</span>
+            </a>
+            <a href="/progress" class="nav-item" data-page="progress">
+                <span class="nav-icon">◈</span>
+                <span class="nav-label">Progress</span>
+            </a>
+            <a href="/earn-agent" class="nav-item locked" data-page="earn-agent">
+                <span class="nav-icon">⚡</span>
+                <span class="nav-label">Earn Agent</span>
+                <span class="lock-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+            </a>
+            <a href="/build-agent" class="nav-item locked" data-page="build-agent">
+                <span class="nav-icon">◆</span>
+                <span class="nav-label">Build Agent</span>
+                <span class="lock-icon">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+            </a>
+            <a href="/settings" class="nav-item" data-page="settings">
+                <span class="nav-icon">⚙</span>
+                <span class="nav-label">Settings</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="sidebar-divider desktop-only"></div>
+
+    <!-- STATS SECTION -->
+    <div class="sidebar-section desktop-only">
+        <span class="section-label">STATS</span>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" id="stat-streak">--</span>
+                <span class="stat-label">Streak</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="stat-done">--%</span>
+                <span class="stat-label">Done</span>
+            </div>
+            <div class="stat-card full-width">
+                <span class="stat-value" id="stat-time">--h</span>
+                <span class="stat-label">Total time</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-divider desktop-only streak-divider"></div>
+
+    <!-- STREAK TRACKER -->
+    <div class="sidebar-section desktop-only streak-section">
+        <span class="section-label">16-WEEK JOURNEY</span>
+        <div class="streak-grid" id="streak-grid">
+            <!-- JS will inject 16 squares here -->
+        </div>
+    </div>
+
+    <!-- USER CARD -->
+    <div class="user-card-wrapper">
+        <div class="user-card">
+            <div class="user-avatar">AT</div>
+            <div class="user-info">
+                <div class="user-name">Amen Teshome</div>
+                <div class="user-id">Member #53</div>
+            </div>
+            <div class="user-actions">
+                <button class="sign-out-btn">Sign Out</button>
+            </div>
+        </div>
+    </div>
+</aside>
