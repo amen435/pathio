@@ -1,0 +1,494 @@
+/* week-detail.css */
+.week-detail.active {
+    display: block !important;
+}
+
+.detail-header {
+    margin-bottom: 24px;
+}
+.detail-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #3DFF8F;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.detail-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #E8F0EB;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    white-space: pre-wrap;
+}
+.detail-desc {
+    font-family: 'Hind', sans-serif;
+    font-size: 12px;
+    color: #4A6355;
+    line-height: 1.5;
+}
+
+/* Tabs */
+.tabs-header {
+    display: flex;
+    border-bottom: 1px solid #1A2E22;
+    margin-bottom: 20px;
+}
+.tab-btn {
+    flex: 1;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 0;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tab-btn:hover {
+    color: #8FB89A;
+}
+.tab-btn.active {
+    border-bottom: 2px solid #3DFF8F;
+    color: #3DFF8F;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+
+/* WATCH Tab */
+.video-block {
+    margin-bottom: 16px;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #111D17;
+    border: 1px solid #1A2E22;
+}
+.video-block iframe {
+    display: block;
+    border: none;
+}
+.video-info {
+    padding: 12px;
+}
+.video-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    color: #E8F0EB;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.video-meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+}
+.explanation {
+    font-family: 'Hind', sans-serif;
+    font-size: 13px;
+    color: #E8F0EB;
+    line-height: 1.5;
+    white-space: pre-wrap;
+}
+
+/* CODE Tab */
+.code-notebook {
+    background: #080F0A;
+    border: 1px solid #1A2E22;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+.notebook-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111D17;
+    padding: 8px 12px;
+    border-bottom: 1px solid #1A2E22;
+}
+.lang-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+}
+.run-btn {
+    background: transparent;
+    border: 1px solid #3DFF8F;
+    color: #3DFF8F;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.run-btn:hover {
+    background: rgba(61,255,143,0.1);
+}
+.hidden {
+    display: none !important;
+}
+
+#code-editor-wrap {
+    min-height: 180px;
+}
+
+.code-editor-container {
+    min-height: 180px;
+    max-height: 280px;
+}
+
+.code-editor-container .cm-editor {
+    min-height: 180px;
+}
+
+.code-editor-mobile {
+    width: 100%;
+    min-height: 180px;
+    background: #050A08;
+    color: #8FDFBA;
+    font-family: 'Geist Mono', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 12px;
+    border: none;
+    resize: vertical;
+    outline: none;
+}
+
+.fill-blanks-panel {
+    padding: 12px;
+    background: #050A08;
+    min-height: 180px;
+}
+
+.fill-blanks-hint {
+    font-family: 'Hind', sans-serif;
+    font-size: 12px;
+    color: #8DA197;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.fill-blanks-code {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: #8FDFBA;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.blank-input {
+    background: #0C1410;
+    border: 1px solid #3DFF8F;
+    color: #E8F0EB;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    min-width: 80px;
+    margin: 0 4px;
+}
+
+.fill-back-btn {
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid #1A2E22;
+    color: #8DA197;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fill-back-btn:hover {
+    border-color: #3DFF8F;
+    color: #3DFF8F;
+}
+
+.code-output {
+    background: #111D17;
+    border-top: 1px dashed #1A2E22;
+    padding: 12px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    min-height: 48px;
+}
+
+.code-output.output-success,
+.code-output .output-line {
+    color: #3DFF8F;
+}
+
+.code-output.output-error,
+.code-output.output-error .output-line {
+    color: #F87171;
+}
+
+.code-output.output-neutral {
+    color: #8FB89A;
+}
+
+.output-line {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.html-preview-frame {
+    width: 100%;
+    min-height: 120px;
+    border: none;
+    background: #E8F0EB;
+    border-radius: 4px;
+}
+.mobile-note {
+    font-family: 'Hind', sans-serif;
+    font-size: 11px;
+    color: #4A6355;
+    background: rgba(74,99,85,0.1);
+    padding: 10px;
+    border-radius: 4px;
+}
+.mobile-note a {
+    color: #3DFF8F;
+    text-decoration: none;
+}
+
+/* BUILD Tab */
+.project-card {
+    background: #111D17;
+    border: 1px solid #1A2E22;
+    border-radius: 6px;
+    padding: 16px;
+}
+.project-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.project-icon {
+    font-size: 16px;
+}
+.project-title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 14px;
+    color: #3DFF8F;
+    font-weight: 700;
+}
+.project-desc {
+    font-family: 'Hind', sans-serif;
+    font-size: 13px;
+    color: #E8F0EB;
+    margin-bottom: 16px;
+}
+.project-starter {
+    background: #080F0A;
+    border: 1px solid #1A2E22;
+    padding: 12px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+}
+.project-starter pre {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: #8FB89A;
+    margin: 0;
+}
+.project-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.project-actions button {
+    width: 100%;
+    padding: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.project-actions button:first-child {
+    background: #3DFF8F;
+    color: #080F0A;
+    border: none;
+    font-weight: 600;
+}
+.project-actions button:last-child {
+    background: transparent;
+    color: #4A6355;
+    border: 1px solid #1A2E22;
+}
+.project-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.project-meta .pill {
+    background: #0C1410;
+    border: 1px solid #1A2E22;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+}
+
+/* PROVE Tab */
+.prove-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.prove-instruction {
+    font-family: 'Hind', sans-serif;
+    font-size: 13px;
+    color: #E8F0EB;
+}
+.upload-zone {
+    border: 1px dashed #3DFF8F;
+    background: rgba(61,255,143,0.05);
+    border-radius: 6px;
+    padding: 20px;
+    text-align: center;
+}
+.upload-zone input {
+    display: none;
+}
+.upload-zone label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: #3DFF8F;
+    cursor: pointer;
+    display: block;
+}
+.or-divider {
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: #4A6355;
+    position: relative;
+}
+.or-divider::before, .or-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #1A2E22;
+}
+.or-divider::before { left: 0; }
+.or-divider::after { right: 0; }
+#code-submission, #reflection {
+    width: 100%;
+    background: #080F0A;
+    border: 1px solid #1A2E22;
+    color: #E8F0EB;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    padding: 12px;
+    border-radius: 6px;
+    resize: vertical;
+    outline: none;
+}
+#code-submission { height: 100px; }
+#reflection { height: 60px; }
+.reflection label {
+    display: block;
+    font-family: 'Hind', sans-serif;
+    font-size: 12px;
+    color: #4A6355;
+    margin-bottom: 8px;
+}
+.complete-btn {
+    width: 100%;
+    background: #3DFF8F;
+    color: #080F0A;
+    border: none;
+    padding: 12px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 8px;
+}
+.progress-hint {
+    text-align: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: #4A6355;
+}
+.celebration {
+    text-align: center;
+    color: #3DFF8F;
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 20px;
+    padding: 40px 0;
+    animation: popIn 0.5s ease-out forwards;
+}
+
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Modal styles for Tablet and Mobile */
+@media (max-width: 1024px) {
+    .week-detail {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 340px;
+        height: 100%;
+        z-index: 2000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        box-shadow: -4px 0 24px rgba(0,0,0,0.5);
+    }
+    .week-detail.active {
+        transform: translateX(0);
+        display: block !important;
+    }
+    .close-modal-btn {
+        display: block;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: transparent;
+        border: none;
+        color: #E8F0EB;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+        line-height: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .week-detail {
+        width: 100%;
+        transform: translateY(100%);
+        border-left: none;
+    }
+    .week-detail.active {
+        transform: translateY(0);
+    }
+}
+.close-modal-btn {
+    display: none;
+}

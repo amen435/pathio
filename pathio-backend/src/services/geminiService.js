@@ -1,9 +1,11 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const MODEL_NAME = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-const MAX_OUTPUT_TOKENS = 8000;
-const TEMPERATURE = 0.3;
-const MAX_PARSE_ATTEMPTS = 2;
+const MAX_OUTPUT_TOKENS = 16384;
+const TEMPERATURE = 0.2;
+const MAX_PARSE_ATTEMPTS = 3;
+const MIN_WEEKS = 8;
+const MAX_WEEKS = 10;
 
 function isQuotaError(err) {
   const message = String(err?.message || '');
@@ -48,7 +50,18 @@ function toPublicGeminiError(err) {
   return err;
 }
 
-function buildRoadmapPrompt(answers) {
+function getTargetWeekCount(answers) {
+  const hours = Number(answers.hoursPerWeek || answers.hours_per_week || 5);
+  const level = String(answers.currentLevel || answers.current_level || 'beginner').toLowerCase();
+
+  if (level.includes('intermediate') && hours >= 10) {
+    return MAX_WEEKS;
+  }
+
+  return MIN_WEEKS;
+}
+
+function buildRoadmapPrompt(answers, weekCount) {
   const preferredDays = Array.isArray(answers.preferredDays)
     ? answers.preferredDays.join(', ')
     : answers.preferredDays || 'Not specified';
@@ -66,41 +79,30 @@ USER PROFILE:
 GENERATE A PERSONALIZED ROADMAP:
 
 STRICT RULES:
-1. Calculate realistic total weeks:
-   - Beginner + 3-5hrs/week = 20-24 weeks
-   - Beginner + 10-15hrs/week = 14-18 weeks
-   - Intermediate + 5-10hrs/week = 12-16 weeks
-   - Intermediate + 15+hrs/week = 8-12 weeks
+1. Return EXACTLY ${weekCount} weeks (weekNumber 1 through ${weekCount}). No more, no less.
 
-2. Each week = ONE focused topic
+2. Each week = ONE focused topic aligned to the user's goal.
 
-3. Every week MUST have a mini project with VISIBLE output
-   - Not "practice variables" → "Build a tip calculator"
-   - Not "learn loops" → "Build a times table generator"
-   - User must be able to screenshot the result
+3. Every week MUST have a mini project with VISIBLE output in the browser.
 
-4. Difficulty increases gradually — never jump too fast
+4. Difficulty increases gradually. Weeks 3-5: add encouragementNote (short string).
 
-5. Weeks 3-5 are the danger zone where most people quit
-   - Add extra encouragement notes there
-   - Make those weeks slightly easier
+5. Use simple beginner-friendly English. Keep explanation under 280 characters.
 
-6. If user quit before due to something being hard:
-   - Add a support week before that topic
-   - Include alternative explanation
+6. notebookCode and starterCode: max 12 lines, escape newlines as \\n, no unescaped quotes inside strings.
 
-7. All explanations in simple, beginner-friendly English
-   - Assume zero prior knowledge
-   - Use analogies and real-world examples
-   - Avoid jargon unless you explain it
+7. mobileFillBlanks must be a small object with template, blanks (array), explanation.
 
-8. Mobile-friendly projects
-   - 60% of users are on phones
-   - Projects must work in browser, no complex setup
+8. difficulty must be one of: easy, medium, hard
 
-9. Include fill-in-the-blanks version for mobile users
+9. encouragementNote is null unless weeks 3-5, then a short string.
 
-RETURN ONLY VALID JSON ARRAY (no markdown, no explanation):
+CRITICAL JSON RULES:
+- Output ONLY a raw JSON array. No markdown fences.
+- All string values must use double quotes with proper escaping.
+- Do not truncate the response — complete all ${weekCount} weeks.
+
+RETURN ONLY VALID JSON ARRAY:
 
 [
   {
@@ -124,6 +126,13 @@ RETURN ONLY VALID JSON ARRAY (no markdown, no explanation):
     }
   }
 ]`;
+}
+
+function buildRepairPrompt(answers, weekCount) {
+  return `${buildRoadmapPrompt(answers, weekCount)}
+
+IMPORTANT: Your previous response was invalid JSON. Regenerate from scratch.
+Return exactly ${weekCount} complete week objects. Keep every string short. Valid JSON only.`;
 }
 
 function getGeminiModel() {
@@ -179,9 +188,75 @@ function stripJsonWrappers(text) {
   return trimmed;
 }
 
-function parseRoadmapJson(text) {
+function salvageWeekObjects(text) {
+  const weeks = [];
+  let depth = 0;
+  let start = -1;
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+
+    if (inString) {
+      if (escaped) {
+        escaped = false;
+      } else if (char === '\\') {
+        escaped = true;
+      } else if (char === '"') {
+        inString = false;
+      }
+      continue;
+    }
+
+    if (char === '"') {
+      inString = true;
+      continue;
+    }
+
+    if (char === '{') {
+      if (depth === 0) {
+        start = i;
+      }
+      depth += 1;
+    } else if (char === '}') {
+      depth -= 1;
+      if (depth === 0 && start !== -1) {
+        const chunk = text.slice(start, i + 1);
+        if (chunk.includes('"weekNumber"')) {
+          try {
+            weeks.push(JSON.parse(chunk));
+          } catch (_) {
+            /* skip broken chunk */
+          }
+        }
+        start = -1;
+      }
+    }
+  }
+
+  return weeks.length >= MIN_WEEKS ? weeks : null;
+}
+
+function parseRoadmapJson(text, expectedWeekCount) {
   const cleaned = stripJsonWrappers(text);
-  const parsed = JSON.parse(cleaned);
+  let parsed;
+
+  try {
+    parsed = JSON.parse(cleaned);
+  } catch (parseErr) {
+    parsed = salvageWeekObjects(cleaned);
+
+    if (!parsed) {
+      const error = new Error(parseErr.message);
+      error.status = 502;
+      error.publicMessage =
+        'The AI returned incomplete data. Click Try again — generation usually succeeds on retry.';
+      throw error;
+    }
+
+    console.warn(`Salvaged ${parsed.length} weeks from malformed Gemini JSON.`);
+  }
 
   if (!Array.isArray(parsed)) {
     const error = new Error('Gemini roadmap response must be a JSON array.');
@@ -190,16 +265,16 @@ function parseRoadmapJson(text) {
     throw error;
   }
 
-  validateRoadmap(parsed);
+  validateRoadmap(parsed, expectedWeekCount);
 
   return parsed;
 }
 
-function validateRoadmap(roadmap) {
-  if (roadmap.length < 8 || roadmap.length > 24) {
-    const error = new Error('Gemini roadmap response must include 8 to 24 weeks.');
+function validateRoadmap(roadmap, expectedWeekCount) {
+  if (roadmap.length < MIN_WEEKS || roadmap.length > MAX_WEEKS) {
+    const error = new Error(`Gemini roadmap must include ${MIN_WEEKS} to ${MAX_WEEKS} weeks.`);
     error.status = 502;
-    error.publicMessage = 'The AI returned a roadmap with an invalid length. Please try again.';
+    error.publicMessage = `The AI returned ${roadmap.length} weeks instead of ${expectedWeekCount}. Please try again.`;
     throw error;
   }
 
@@ -248,28 +323,48 @@ async function callGemini(prompt) {
   }
 }
 
+function isJsonParseError(err) {
+  const message = String(err?.message || '');
+  return (
+    message.includes('JSON') ||
+    message.includes('Unexpected token') ||
+    message.includes('Unterminated string')
+  );
+}
+
 async function generateRoadmap(onboardingAnswers) {
-  const prompt = buildRoadmapPrompt(onboardingAnswers);
+  const weekCount = getTargetWeekCount(onboardingAnswers);
   let lastError;
 
   for (let attempt = 1; attempt <= MAX_PARSE_ATTEMPTS; attempt += 1) {
     try {
+      const prompt =
+        attempt === 1
+          ? buildRoadmapPrompt(onboardingAnswers, weekCount)
+          : buildRepairPrompt(onboardingAnswers, weekCount);
       const responseText = await callGemini(prompt);
-      return parseRoadmapJson(responseText);
+      return parseRoadmapJson(responseText, weekCount);
     } catch (err) {
       lastError = toPublicGeminiError(err);
 
-      if (!isRetryableGenerationError(lastError) || attempt >= MAX_PARSE_ATTEMPTS) {
+      if (!isRetryableGenerationError(lastError) && !isJsonParseError(lastError)) {
         break;
       }
 
-      console.warn(`Gemini roadmap parse failed on attempt ${attempt}. Retrying once.`);
+      if (attempt >= MAX_PARSE_ATTEMPTS) {
+        break;
+      }
+
+      console.warn(`Gemini roadmap failed on attempt ${attempt}: ${lastError.message}`);
+      await new Promise((resolve) => setTimeout(resolve, 1500 * attempt));
     }
   }
 
   console.error('Gemini roadmap generation failed:', lastError.message);
 
-  const error = new Error(lastError.publicMessage || 'Roadmap generation failed. Please try again.');
+  const error = new Error(
+    lastError.publicMessage || 'Roadmap generation failed. Please try again in a moment.'
+  );
   error.status = lastError.status || 502;
   throw error;
 }
